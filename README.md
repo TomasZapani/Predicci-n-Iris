@@ -51,7 +51,7 @@ http://127.0.0.1:8000/
 ---
 
 ## 🌼 Vista de la Interfaz
-![Interfaz de la aplicación](imagenes/Img1.png)
+![Interfaz de la aplicación](imagenes/Img1.png)![Interfaz de la aplicación](imagenes/Img1.png)
 
 ---
 
