@@ -1,32 +1,40 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 import pickle
 import numpy as np
-from model_training import model
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-with open('model.pkl','rb') as f:
+# Cargar el modelo entrenado
+with open("model.pkl", "rb") as f:
     model = pickle.load(f)
 
+# Mapeo de clases (ID) a nombres de plantas
+plant_names = {0: "Setosa", 1: "Versicolor", 2: "Virginica"}
 
+# Ruta principal que muestra el HTML
+@app.get("/", response_class=HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "predicted_name": None, "predicted_id": None})
 
-class IrisReq(BaseModel):
-    sepal_length: float
-    sepal_width: float
-    petal_lentgh: float
-    petal_width: float
-
-@app.get("/")
-def read_root():
-    return {"message": "¡Bienvenido a mi API de Machine Learning con FastAPI!"}
-
-@app.get("/predict/")
-def predict_get(sepal_length: float, sepal_width: float, petal_length: float, petal_width: float):
-    import numpy as np
-    with open("model.pkl", "rb") as f:
-        model = pickle.load(f)
+# Ruta para procesar el formulario
+@app.post("/predict/", response_class=HTMLResponse)
+async def predict(
+    request: Request,
+    sepal_length: float = Form(...),
+    sepal_width: float = Form(...),
+    petal_length: float = Form(...),
+    petal_width: float = Form(...)
+):
     data = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
     prediction = model.predict(data)
-    predicted_class = int(prediction[0])
-    return {"predicted_class": predicted_class}
+    predicted_id = int(prediction[0])
+    predicted_name = plant_names[predicted_id]
+
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "predicted_name": predicted_name,
+        "predicted_id": predicted_id
+    })

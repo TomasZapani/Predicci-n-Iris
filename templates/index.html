@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predicción de Iris</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4A90E2;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            margin-top: 20px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #357ABD;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0f7e9;
+            border: 1px solid #b2dfdb;
+            border-radius: 5px;
+            color: #00796b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predicción de Iris</h1>
+        <form action="/predict/" method="post">
+            <label for="sepal_length">Sepal Length:</label>
+            <input type="text" id="sepal_length" name="sepal_length" required>
+
+            <label for="sepal_width">Sepal Width:</label>
+            <input type="text" id="sepal_width" name="sepal_width" required>
+
+            <label for="petal_length">Petal Length:</label>
+            <input type="text" id="petal_length" name="petal_length" required>
+
+            <label for="petal_width">Petal Width:</label>
+            <input type="text" id="petal_width" name="petal_width" required>
+
+            <input type="submit" value="Predecir">
+        </form>
+
+        {% if predicted_name %}
+        <div class="result">
+            🌸 <strong>Nombre de la Planta:</strong> {{ predicted_name }}<br>
+            🆔 <strong>ID de la Planta:</strong> {{ predicted_id }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
